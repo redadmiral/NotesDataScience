@@ -1,0 +1,31 @@
+Helpfile in R
+
+Hilfe zu spezifischer Funktion:
+?Funktionsname
+
+help.search("Funktionsname")
+
+mögliche Argumente für Funktion:
+
+args("Funktionsname")
+
+Funktionscode ansehen
+
+Funktionsname (Ohne Klammern oder anderen Shit)
+
+Cheat-Sheet:
+cran.r-project.org/doc/contrib/Short-refcard.pdf
+
+MARKDOWN
+
+h1: #Heading
+h2: ##Heading
+h3: ###Heading
+
+ul: 
+*item
+*item
+*item
+
+
+
