@@ -1,0 +1,69 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{ngerman} % Neue deutsche Rechtschreibung, deutsche Überschriften
+\usepackage[T1] {fontenc} % again for symbols
+\usepackage[utf8]{inputenc} % needed for special symbols (like czech diacritics)
+\usepackage[babel,german=quotes]{csquotes} % Deutsche Anführungszeichen
+\usepackage[]{graphicx}
+
+\usepackage[
+   backend=biber      % Notwendig!
+  ,style=authortitle   % Stil des Literaturverzeichnisses (https://de.sharelatex.com/learn/Biblatex_bibliography_styles)
+%  ,citestyle=ieee     % Stil der Zitationen
+  ,babel=other        % Mehrere Sprachen im Literaturverzeichnis
+%  ,sortlocale=de_DE   % locale of main language, it is for sorting
+%  ,bibencoding=UTF8   % Gibt das Encoding der externen .bib Datei an
+  ,block=space
+]{biblatex}
+
+\bibliography{bibliography} %interne .bib Datei
+%\addbibresource{test2.bib} %externe .bib Datei
+
+%Dokument
+
+\title{Semesterrückblick}
+\author{Marco Lehner}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\date
+
+\begin{abstract}
+\end{abstract}
+
+\section{Bericht über die Gruppentreffen}
+
+Im vergangenen Semester fanden drei Stipendiatsgruppentreffen statt, am 19. Oktober, am 11. Dezember und am 2. Februar. Ein Schwerpunkt diesen Jahres war die verstärkte Werbung von Neustipendiatinnen und Stipendiaten. Dazu hat die Stipgruppe an verschiedenen Veranstaltungen, wie der Erstibegrüßung an der FAU Erlangen (zusammen mit dem DGB), der langen Nacht der Wissenschaften oder auch an dem noch folgenden Stipendieninfoabend in Nürnberg teilgenommen.
+
+Desweiteren wurde die Veranstaltung Murks - Nein Danke! von Michael Schmid durchgeführt, zu der über 300 Personen kamen.
+
+\section{Allgemeine Situation}
+
+Die Neuzugänge des vorherigen Semesters beteiligen sich noch immer sehr rege an den anfallenden Aufgaben in der Stipgruppe; Jane Hirschfeld ist inzwischen sogar zweite Stipgruppensprecherin. Auch die in diesem Semester aufgenommenen Neustipendiatinnen und Stipendiatinnen nehmen regelmäßig an den Stipgruppentreffen teil. Leider verlassen Antonia Enßner und Judith Holland die Gruppe im kommenden Semester, da ihr Promotionsstipendium ausläuft. Beide waren immer eine große Unterstützung.
+
+Die Teilnehmer*innenzahl an den Gruppentreffen war dieses Semester etwas höher als gewöhnlich - vor allem an der Weihnachtsfeier waren fast 20 Teilnehmer*innen anwesend, die teilweise danach noch zusammen zu einer Party des DGB gingen. Bei den anderen Terminen waren wie gewohnt etwa 10 Personen anwesend. Von der Hälfte der Personen, die gefehlt haben ist bekannt warum sie nicht auftauchen, meist liegt es an familiären Verpflichtungen, der langen Anreise von Bayreuth aus oder gewerkschaftlichen Terminen.
+
+Gutachten konnten im vergangenen Semester alle geschrieben werden, wenn auch nicht immer von zwei Gutachter*innen. Es fällt außerdem auf, dass manche Personen mehrere Gutachten geschrieben haben während andere keine Gutachten verfasst haben. Bei den betreffenden stößt dies jedoch auf keinen Unmut und um qualitativ hochwertige Gutachten zu gewährleisten soll niemand dazu gezwungen werden, ein Gutachten zu schreiben wenn er/sie nicht will.
+
+Allgemein herrscht in der Gruppe eine angenehme Stimmung, die Gruppe ist homogen und arbeitet professionell zusammen.
+
+\section{Aktuelle Aufgaben}
+
+Erster Stipgruppensprecher ist weiterhin Marco Lehner, der Posten des zweiten Stipgruppensprechers ging von Antonia Enßner (geb. Sperber) an Jane Hirschfeld über und Fabian Bieberstein löste im Oktober Philipp Reich als Kassenwart ab.
+
+Zweite Gruppensprecherin und Kassenwart wurden neu besetzt, weil die entsprechenden Personen aus der Gruppe ausgeschieden sind. Sie haben immer sehr gute Arbeit geleistet, wofür wir sehr dankbar sind.
+
+\section{Ausblick}
+
+Im kommenden Semester wird im Oktober eine Teambuilding-Maßnahme im Klettergarten stattfinden um die Gruppendynamik zu verbessern und sich persönlich besser kennenzulernen. Darüber hinaus ist uns zugetragen worden, dass ver.di ihre Praktikanten unter Mindestlohn bezahlt. Wir forschen diesbezüglich nach und falls sich herausstellen sollte, dass das zutrifft werden wir nach Bündnispartnern für eine Kampagne suchen.
+Anfang März werden wir an einem Stipendieninfoabend in Nürnberg teilnehmen.
+
+\section{Fragen und Anregungen}
+
+Keine.
+
+\section{Sonstiges}
+Die Teilnehmer*innenliste der Weinachtssitzung ist leider verloren gegangen. An ihr haben teilgenommen: Marco Lehner, Antonia Enßner, Fabian Bieberstein, Uli Schlee, Judith Holland, Laura Schuhn, Patrick Janker, Alex Sotorrios Parriente, Eric Görlitzer, Fabian Nöth, Jane Hirschfeld, Michaela Mader, Florian Kern, Simon Baumeister, Michael Schmid, Alex Trummer
+
+\end{document}

@@ -38,39 +38,64 @@ Um Daten zu teilen und so kollaborativ arbeiten zu können, empfiehlt es sich [F
 
 #Woche 2.1
 
-## ASDF
+## Erste Swirl-Übungen
 
-+ **seq(m, n, by)** erstellt eine Zahlenreihe von m nach n mit Iterationsweite by
-+ **m:n** erstellt eine Zahlenreihe von m nach n.
-+ **length()** gibt die Länge eines Vektors aus.
-+ **class(x)** gibt die Klasse von x aus.
++ **`seq(m, n, by)`** erstellt eine Zahlenreihe von `m` nach `n` mit Iterationsweite by
++ **`m:n`** erstellt eine Zahlenreihe von `m` nach n.
++ **`length()`** gibt die Länge eines Vektors aus.
++ **`class(x)`** gibt die Klasse von`x`aus.
 
 ## Subsetting vectors
 
-Der erste Eintrag eines Vektors in R hat die Nummer 1, nicht 0 wie bei den meisten anderen Sprachen.
+Der erste Eintrag eines Vektors in R hat die Nummer 1, nicht 0 wie bei den meisten anderen Sprachen. Vektoren können nur einen Typ Daten speichern, also nur `numeric`, `logical`, `character`, `integer` und `complex`. Wenn diese vermischt werden, werden alle Datentypen zum am wenigsten speziellen, im Normalfall `character` gewandelt. Ausnahme ist die Kombination `logical` und `numeric`, der zu `numeric` wird.
 
-+ **?Funktionsname** gibt die Hilfeseite aus.
-+ **[n:m]** gibt die ganzen Zahlen zwischen n und m aus. Funktioniert auch rückwärts, wenn n < m.
-+ **is.na** Nimmt Vektor als Argument und gibt Vektor mit Bool-Werten zurück. TRUE wenn NA, FALSE wenn nicht NA7
-..+ **y[!is.na(y)]** gibt eine Teilmenge aus, die nur Werte enthält, die nicht NA sind.
-..+ **y[y>0]** gibt eine Teilmenge aus, die nur die positiven Werte von y ausgibt. NA ist positiv und negativ.
-+ **x[n]** gibt den n-ten Wert von x aus. Nummerierung beginnt bei 1.
-+ **x[-n]** gibt alle Werte von x bis auf n aus.
-+ **x["name1"]** gibt den Wert namens "name1" eines benannten Vektors aus.
-+ **x[-c(m, n, o)]** gibt alle Werte bis auf m, n und o aus.
-+ **c(name1 = 1, name2 = 2, ...)** Erstellt benannten Vektor
-+ **names()** gibt den Namen von benannten Vektoren aus.
-+ **identical()** überprüft, ob zwei Vektoren gleich sind.
++ **`?Funktionsname`** gibt die Hilfeseite aus.
++ **`[n:m]`** gibt die ganzen Zahlen zwischen `n` und `m` aus. Funktioniert auch rückwärts, wenn `n` < m.
++ **`is.na`** Nimmt Vektor als Argument und gibt Vektor mit Bool-Werten zurück. TRUE wenn NA, FALSE wenn nicht NA7
+..+ **`y[!is.na(y)]`** gibt eine Teilmenge aus, die nur Werte enthält, die nicht NA sind.
+..+ **`y[y>0]`** gibt eine Teilmenge aus, die nur die positiven Werte von`y`ausgibt. NA ist positiv und negativ.
++ **`x[n]`** gibt den n-ten Wert von`x`aus. Nummerierung beginnt bei 1.
++ **`x[-n]`** gibt alle Werte von`x`bis auf `n` aus.
++ **`x["name1"]`** gibt den Wert namens "name1" eines benannten Vektors aus.
++ **`x[-c(m, n, o)]`** gibt alle Werte bis auf m, `n` und o aus.
++ **`c(name1 = 1, name2 = 2, ...)`** Erstellt benannten Vektor
++ **`names()`** gibt den Namen von benannten Vektoren aus.
++ **`identical()`** überprüft, ob zwei Vektoren gleich sind.
++ **`as.numeric(x)`** wandelt `x` in Typ numeric um. Funktioniert auch mit `as.logical()` und `as.character()`
 
 ##Matrizen und Data Frames
 Matrizen können nur einen spezifischen Datentyp beinhalten. Data Frames dahingegen verschiedene. Matrizen werden aus Vektoren erstellt, deren dim()-Attribut verändert wurde oder dem matrix()-Befehl.
 
-+ **dim()** gibt das dim-Attribut aus
-+ **dim(x) <- c(n, m)** gibt x n Zeilen und m Spalten
-+ **matrix(x)** erstellt die Matrix x
-+ **cbind(x, y)** verbindet die beiden Vektoren x und y. Nur bei selbem Datentyp anwenden (Int-Int, Str-Str)
-+ **data.frame(x, y)** Erstellt Dataframe aus x und y. Belässt verschiedene Datentypen im Ausgangszustand und lässt gemischte Datensätze zu.
-+ **`colnames`**
++ **`matrix(nrow=n, ncol= m)`** erstellt eine leere n*m-Matrix
++ **`dim()`** gibt das dim-Attribut aus
++ **`dim(x) <- c(n, m)`** gibt`x`n Zeilen und `m` Spalten
++ **`matrix(x)`** erstellt die Matrix x
++ **`cbind(x, y)`** verbindet die beiden Vektoren`x`und `y`. Beide sind eine Spalte in der Matrix. Nur bei selbem Datentyp anwenden (Int-Int, Str-Str)
++ **`rbind(x, y)`** verbindet die beiden Vektoren `x` und `y`. Beide sind eine Zeile in der Matrix. Nur bei selbem Datentyp anwenden (Int-Int, Str-Str)
++ **`data.frame(x, y)`** Erstellt Dataframe aus `x` und `y`. Belässt verschiedene Datentypen im Ausgangszustand und lässt gemischte Datensätze zu.
++ **``colnames(x)`** greift auf die Spaltennamen einer Matrix oder eines Dataframes zu.
++ **``rownames(x)`** greift auf die Zeilennamen einer Matrix oder eines Dataframes zu.
++ **`colnames(x) <- vector`** weißt die in `vector` gespeicherten Strings den Spalten von `x` zu.
+
+## Listen
+Auch Listen können verschiedene Dateitypen beinhalten. Ihre einzelnen Bestandteiler werden durch eckige Doppelklammern `list[[n]]` aufgerufen.
+
++ **`list <- list(a=1, b=2, c=3)`** erstellt eine benannte Liste.
+
+## Faktoren
+Faktoren werden benutzt um Datenkategorien zu beschreiben. Sie nehmen verschiedene Datentypen auf, `character` macht jedoch am meisten Sinn, da sie benutzt werden um Daten zu beschreiben. Typische Werte eines Faktors sind bspw. `yes` und `no` oder `männlich` und `weiblich`. Die einzelnen Kategorien werden in einem Attribut `levels` gespeichert.
+
++ **`table(x)`** gibt die Anzahl aus, wie oft jedes der Levels verwendet wurde.
++ **`unclass(x)`** beschreibt die Levels in `integers`. So werden sie "unter der Haube" auch dargestellt. Aus `yes` und `no` wird `1` und `2`.
++ **`x <- factor(c("yes", "no", "no"), leves="yes", "no")`** Lässt den User selbst die Reihenfolge der Levels festlegen. Hier ist `yes` mit `1` und `no` mit `2` codiert. Default wäre andersrum, weil n im Alphabet vor y kommt.
+
+## NA und NaN
+
+NA (Not Available) und NaN (Not a Number) sind fehlende Werte. Sie entstehen bei unzlässigen Operationen wie 0/0. NA und NaN können verschiedene Klassen haben, je nachdem aus welcher Operation sie hervorgegangen sind. NaNs sind alle NA, aber NAs sind nicht alle NaNs.
+
++ **`is.na(x)`** checkt welcher Wert von x NA ist und gibt einen Vektor mit Bool-Werten zurück.
++ **`is.nan(x)`** checkt welcher Wert von x NaN ist und gibt einen Vektor mit Bool-Werten zurück.
+
 
 
 ##Die Geschichte von S und R
