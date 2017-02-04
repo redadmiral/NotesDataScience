@@ -1,7 +1,7 @@
 Notes
 =====
 
-#Week 1.1
+#Woche 1.1
 
 ##Kurzhilfe in R
 
@@ -9,13 +9,13 @@ Um die Hilfe zu einer Funktion aufzurufen `?Funktionsname` oder `help.search("Fu
 
 Die für eine Funktion möglichen Argumente werden mit `args("Funktionsname")` aufgelistet. Den Code einer Funktion kann man mit `Funktionsname` ohne Angabe von Klammern einsehen. Ein Cheat-Sheet ist unter [cran.r-project.org/doc/contrib/Short-refcard.pdf](http://cran.r-project.org/doc/contrib/Short-refcard.pdf) verfügbar.
 
-#Week 1.2
+#Woche 1.2
 
 ###Installieren von Paketen
 
 Pakete werden mit `install.packages("Paketname")` installiert. Im Anschluss werden sie mit `library(Paketname)` ohne Anführungszeichen eingebunden.
 
-#Week 1.3
+#Woche 1.3
 
 ##Arten der Datenanalyse
 
@@ -36,11 +36,41 @@ Daten tauchen meist als Rohdaten in Form von CSV oder XLS-Dateien auf oder werde
 
 Um Daten zu teilen und so kollaborativ arbeiten zu können, empfiehlt es sich [Figshare](https://figshare.com) zu verwenden. Leek hat außerdem einen [Leitfaden](https://github.com/jtleek/datasharing) zum Teilen von Datensätzen entwickelt.
 
-#Week 2.1
+#Woche 2.1
 
-##R Kommandos
+## ASDF
 
-+ **is.na** Nimmt Vektor als Argument und gibt Vektor mit Bool-Werten zurück. TRUE wenn NA, FALSE wenn nicht NA
++ **seq(m, n, by)** erstellt eine Zahlenreihe von m nach n mit Iterationsweite by
++ **m:n** erstellt eine Zahlenreihe von m nach n.
++ **length()** gibt die Länge eines Vektors aus.
++ **class(x)** gibt die Klasse von x aus.
+
+## Subsetting vectors
+
+Der erste Eintrag eines Vektors in R hat die Nummer 1, nicht 0 wie bei den meisten anderen Sprachen.
+
++ **?Funktionsname** gibt die Hilfeseite aus.
++ **[n:m]** gibt die ganzen Zahlen zwischen n und m aus. Funktioniert auch rückwärts, wenn n < m.
++ **is.na** Nimmt Vektor als Argument und gibt Vektor mit Bool-Werten zurück. TRUE wenn NA, FALSE wenn nicht NA7
+..+ **y[!is.na(y)]** gibt eine Teilmenge aus, die nur Werte enthält, die nicht NA sind.
+..+ **y[y>0]** gibt eine Teilmenge aus, die nur die positiven Werte von y ausgibt. NA ist positiv und negativ.
++ **x[n]** gibt den n-ten Wert von x aus. Nummerierung beginnt bei 1.
++ **x[-n]** gibt alle Werte von x bis auf n aus.
++ **x["name1"]** gibt den Wert namens "name1" eines benannten Vektors aus.
++ **x[-c(m, n, o)]** gibt alle Werte bis auf m, n und o aus.
++ **c(name1 = 1, name2 = 2, ...)** Erstellt benannten Vektor
++ **names()** gibt den Namen von benannten Vektoren aus.
++ **identical()** überprüft, ob zwei Vektoren gleich sind.
+
+##Matrizen und Data Frames
+Matrizen können nur einen spezifischen Datentyp beinhalten. Data Frames dahingegen verschiedene. Matrizen werden aus Vektoren erstellt, deren dim()-Attribut verändert wurde oder dem matrix()-Befehl.
+
++ **dim()** gibt das dim-Attribut aus
++ **dim(x) <- c(n, m)** gibt x n Zeilen und m Spalten
++ **matrix(x)** erstellt die Matrix x
++ **cbind(x, y)** verbindet die beiden Vektoren x und y. Nur bei selbem Datentyp anwenden (Int-Int, Str-Str)
++ **data.frame(x, y)** Erstellt Dataframe aus x und y. Belässt verschiedene Datentypen im Ausgangszustand und lässt gemischte Datensätze zu.
++ **`colnames`**
 
 
 ##Die Geschichte von S und R
@@ -48,7 +78,7 @@ R ist ein Dialekt von S. S wurde 1976 an den Bell Laboratories entwickelt um Sta
 
 R wurde 1991 in Neuseeland entwickelt und wurde 95 unter GNU-Lizenz veröffentlicht. Die Entwicklung wird von der R-Core-Group vorangetrieben. R hat auch einige Nachteile, die zum Teil auf dem Alter von S beruhen. So werden 3D-Grafiken nur sehr schlecht unterstützt und alles was in R verarbeitet werden soll muss auf dem Rechner selbst gespeichert werden. Wenn der Datensatz also größer ist als die Festplatte kann er nicht bearbeitet werden.
 
-Der R-Core besteht aus den R-base und R-recommended Paketen. Diese werden von der Core-Group maintained. Es sind auf CRAN (Comprehensive R Archive Network) über 4.000 weitere Pakete verfügbar, die von den Usern maintained werden. Auf der [Homepage](https://cran.r-project.org/) von CRAN sind verschiedene Manuals zum Download verfügbar. Vor allem seien das [Import/Export Manual](https://cran.r-project.org/doc/manuals/r-release/R-data.pdf) und das (Introduction-Manual)[https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf].
+Der R-Core besteht aus den R-base und R-recommended Paketen. Diese werden von der Core-Group maintained. Es sind auf CRAN (Comprehensive R Archive Network) über 4.000 weitere Pakete verfügbar, die von den Usern maintained werden. Auf der [Homepage](https://cran.r-project.org/) von CRAN sind verschiedene Manuals zum Download verfügbar. Vor allem seien das [Import/Export Manual](https://cran.r-project.org/doc/manuals/r-release/R-data.pdf) und das [Introduction-Manual](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf).
 
 ##Describe the differences between atomic data types
 
