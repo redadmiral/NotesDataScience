@@ -1,6 +1,11 @@
 Notes
 =====
 
+```
+1. Everything that exists is an object. 2. Everything that happens is a function call.
+  - John Chambers, Entwickler von R
+```
+
 #Woche 1.1
 
 ##Kurzhilfe in R
@@ -38,6 +43,15 @@ Um Daten zu teilen und so kollaborativ arbeiten zu können, empfiehlt es sich [F
 
 #Woche 2.1
 
+##Die Geschichte von S und R
+R ist ein Dialekt von S. S wurde 1976 an den Bell Laboratories entwickelt um Statistiken zu verarbeiten. Es bastand aus Fortran Bibliotheken. S wurde sehr einsteigerfreundlich entwickelt, so dass die Nutzer nicht programmieren können mussten um mit S zu arbeiten und langsam in die Programmierumgebung eingeführt werden sollten. Dort konnten die Nutzer ihre eigenen Tools schreiben und wurden so langsam vom Nutzer zum Programmierer.
+
+R wurde 1991 in Neuseeland entwickelt und wurde 95 unter GNU-Lizenz veröffentlicht. Die Entwicklung wird von der R-Core-Group vorangetrieben. R hat auch einige Nachteile, die zum Teil auf dem Alter von S beruhen. So werden 3D-Grafiken nur sehr schlecht unterstützt und alles was in R verarbeitet werden soll muss auf dem Rechner selbst gespeichert werden. Wenn der Datensatz also größer ist als der Arbeitsspeicher kann er nicht bearbeitet werden. In der Helpfile von read.tables() stehen Tipps zum optimieren des Speicherbedarfs.
+
+
+Der R-Core besteht aus den R-base und R-recommended Paketen. Diese werden von der Core-Group maintained. Es sind auf CRAN (Comprehensive R Archive Network) über 4.000 weitere Pakete verfügbar, die von den Usern maintained werden. Auf der [Homepage](https://cran.r-project.org/) von CRAN sind verschiedene Manuals zum Download verfügbar. Vor allem seien das [Import/Export Manual](https://cran.r-project.org/doc/manuals/r-release/R-data.pdf) und das [Introduction-Manual](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf).
+
+
 ## Erste Swirl-Übungen
 
 + **`seq(m, n, by)`** erstellt eine Zahlenreihe von `m` nach `n` mit Iterationsweite by
@@ -47,6 +61,11 @@ Um Daten zu teilen und so kollaborativ arbeiten zu können, empfiehlt es sich [F
 + **`list.files()`** zeigt alle Dateien im Arbeitsverzeichnis an
 + **`getwd()`** gibt das Arbeitsverzeichnis aus
 + **`setwd("Dateipfad")`** setzt das Arbeitsverzeichnis auf `Dateipfad`
++ **`mean(x)`** berechnet den Mittelwert von x
++ **`sample(n)`** gibt 1 bis n in zufälliger Reihenfolge aus.
++ **`Sys.Date()`** gibt die Systemzeit aus.
++ **`paste()`** nimmt eine beliebige Anzahl an Strings aus und verbindet sie zu einem. Standardtrenner ist das Leerzeichen.
+
 
 ## Subsetting vectors
 
@@ -112,20 +131,23 @@ NA (Not Available) und NaN (Not a Number) sind fehlende Werte. Sie entstehen bei
 Der Speicherbedarf kann mit der Formel Zeilen*Spalten*8 Byte (wenn ausschließlich numerische Daten) berechnet werden. Wegen anfallender Bearbeitungen des Datensatzes beim einlesen sollte der verfügbare RAM etwa doppelt so groß sein wie der Datensatz.
 
 Um den Speicherbedarf zu minimieren ist es hilfreich, R die Klassen der jeweilgen Spalten anzugeben. Dies geschieht am leichtesten mit:
-`initial <- read.table("database.txt", nrows=100)` Hier werden die ersten 100 Zeilen eingelesen und die Klassen automatisch erkannt.
-`classes <- sapply(initial, class)` Hier werden die Klassen aus initial im Vektor classes gespeichert
-`tabAll <- read.table("database.txt", colClasses=classes)` Hier werden die Klassen aus classes der ganzen Datenbank zugeordnet.
-
+```
+initial <- read.table("database.txt", nrows=100) #Hier werden die ersten 100 Zeilen eingelesen und die Klassen automatisch erkannt.
+`classes <- sapply(initial, class)` #Hier werden die Klassen aus initial im Vektor classes gespeichert
+`tabAll <- read.table("database.txt", colClasses=classes)` #Hier werden die Klassen aus classes der ganzen Datenbank zugeordnet.
+```
 ##Textformate
 Textformate werden normalerweise mit `dump` oder `dput` erstellt. Sie enthalten Metadaten in der Datei selbst, mit der sie leichter von R verstanden werden können und im Zweifel auch leichter wieder hergestellt werden können falls die Datei beschädigt wurde. Textformate sind allerdings auch bedeutend größer als die reinen Matrizen oder Vektoren aus denen sie erstellt werden.
 
 Eine Datenbank im Textformat kann mit
-`> y <- data.frame(a=1, b=a)`
-`> y`
-`a b
-1 1 a`
-`> dput(y)`
-`structure(list(a = 1, b = structure(1L, .Label = "a", class = "factor")), .Names = c("a", "b"), row.names = c(NA, -1L), class = "data.frame")`
+```
+> y <- data.frame(a=1, b=a)
+> y
+a b
+1 1 a
+> dput(y)
+structure(list(a = 1, b = structure(1L, .Label = "a", class = "factor")), .Names = c("a", "b"), row.names = c(NA, -1L), class = "data.frame")
+```
 
 + **`dput(x, Dateiname.R)`** nimmt den Vektor `x` und schreibt ihn in `Dateiname.R`.
 + **`dget(Dateiname.R)`** importiert `Dateiname.R`
@@ -143,7 +165,7 @@ Durch Fileconnections werden Dateien einer Variablen in R zugewiesen. Es gibt ve
 
 Fileconnections werden auch verwendet um auf Webpages zuzugreifen und sie auszulesen:
 
-`>  con <- url("http://marco-lehner.de", "r")
+```>  con <- url("http://marco-lehner.de", "r")
 > x <- readLines(con)
 > head(x)
 [1] "<!DOCTYPE html>"                                                         
@@ -151,7 +173,8 @@ Fileconnections werden auch verwendet um auf Webpages zuzugreifen und sie auszul
 [3] "<head>"                                                                  
 [4] "<meta charset=\"UTF-8\">"                                                
 [5] "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">"
-[6] "<title>Marco Lehner - Netzkrams und Technologie</title>"                 `
+[6] "<title>Marco Lehner - Netzkrams und Technologie</title>"                 
+```
 
 ##Teilmengen - Subsetting
 + **`x[1]`** gibt das erste Objekt mit der selben Klasse wie das Ursprungsobjekt aus.
@@ -161,30 +184,170 @@ Fileconnections werden auch verwendet um auf Webpages zuzugreifen und sie auszul
 + **`x$Name`** zieht den Einzelwert `Name` aus Dataframes und Listen. Funktioniert nicht mit der Variable `Name`.
 
 ###NA-Werte entfernen
-`bad <- is.na(x)
-good <- x[!bad]`
+```
+bad <- is.na(x)
+good <- x[!bad]
+```
 
 + **`is.na(x)`** gibt einen Bool-Vektor aus mit `TRUE` an den Stellen wo `NA`s sind.
-+ **`complete.cases(x,y)`** gibt einen Bool-Vektor aus mit `FALSE` an den Stellen wo bei `x` _und_ `y` `NA`s sind. Bei Matrizen werden die Zeilen mit `FALSE` markiert, die mindestens ein `NA` enthalten. 
++ **`complete.cases(x,y)`** gibt einen Bool-Vektor aus mit `FALSE` an den Stellen wo bei `x` _und_ `y` `NA`s sind. Bei Matrizen werden die Zeilen mit `FALSE` markiert, die mindestens ein `NA` enthalten.
 
-##Die Geschichte von S und R
-R ist ein Dialekt von S. S wurde 1976 an den Bell Laboratories entwickelt um Statistiken zu verarbeiten. Es bastand aus Fortran Bibliotheken. S wurde sehr einsteigerfreundlich entwickelt, so dass die Nutzer nicht programmieren können mussten um mit S zu arbeiten und langsam in die Programmierumgebung eingeführt werden sollten. Dort konnten die Nutzer ihre eigenen Tools schreiben und wurden so langsam vom Nutzer zum Programmierer.
+##Bool-Werte
 
-R wurde 1991 in Neuseeland entwickelt und wurde 95 unter GNU-Lizenz veröffentlicht. Die Entwicklung wird von der R-Core-Group vorangetrieben. R hat auch einige Nachteile, die zum Teil auf dem Alter von S beruhen. So werden 3D-Grafiken nur sehr schlecht unterstützt und alles was in R verarbeitet werden soll muss auf dem Rechner selbst gespeichert werden. Wenn der Datensatz also größer ist als der Arbeitsspeicher kann er nicht bearbeitet werden. In der Helpfile von read.tables() stehen Tipps zum optimieren des Speicherbedarfs.
+Die logischen Operatoren sind wie überall `<`, `>`, `==`, `!`. Die und/oder Operatoren gehen sowohl einzeln (`&`, `|`) als auch doppelt (`&&`, `||`). Exklusiv-Oder steht über die Funktion `xor()`bereit.  Bei einzelner Nennung wird bei einem Vektor jeder Wert mit dem anderen abgeglichen
+```
+> TRUE & c(TRUE, FALSE, FALSE)
+[1]  TRUE FALSE FALSE
+```
+bei doppelter Nennung nur der erste Wert
+```
+> TRUE & c(TRUE, FALSE, FALSE)
+[1]  TRUE
+```
+Die `&`-Operatoren werden dabei vor den `|`-Operatoren berechnet.
 
++ **`isTRUE(x)`** gibt `TRUE` aus, wenn x `TRUE` ist.
++ **`xor()`** Exclusive or. Nur T-F oder F-T gibt `TRUE`
++ **`which(x==y)`** Gibt die Indizes der TRUEs in einem Vektor an. (x==y gibt einen Vektor mit Bool-Werten aus.)
++ **`any(x)`** gibt TRUE zurück, wenn x mindestens ein TRUE enthält.
++ **`all(x)`** gibt TRUE zurück, wenn alle Teile von x TRUE sind.
 
-Der R-Core besteht aus den R-base und R-recommended Paketen. Diese werden von der Core-Group maintained. Es sind auf CRAN (Comprehensive R Archive Network) über 4.000 weitere Pakete verfügbar, die von den Usern maintained werden. Auf der [Homepage](https://cran.r-project.org/) von CRAN sind verschiedene Manuals zum Download verfügbar. Vor allem seien das [Import/Export Manual](https://cran.r-project.org/doc/manuals/r-release/R-data.pdf) und das [Introduction-Manual](https://cran.r-project.org/doc/manuals/r-release/R-intro.pdf).
+#Funktionen
+##Definition
+Funktionen werden folgendermaßen definiert:
+```
+function_name <- function(arg1, arg2){
+Manipuliere die Argumente
+Gib einen Wert aus
+}
+```
+Als Beispiel die my_mean-Funktion aus dem swirl-Kurs:
+```
+my_mean <- function(my_vector) {
+  sum(my_vector)/length(my_vector)
+}
+```
+my_mean gibt den Mittelwert des eingegebenen Vektors aus. Wenn gewünscht ist, dass eine unendliche Zahl an Argumenten übergeben werden kann, so setzt man statt eines Argumentnamens `...` ein. Wenn ein **Standardwert** definiert werden soll wird dieser in den Eingabewerten definiert.
 
-##Describe the differences between atomic data types
+```
+addieren() <- function(number, incrementer = 1) {
+  number + incrementer
+}
+```
+Die Funktion addieren addiert nun bei der Eingabe einer Zahl `addieren(4)` die Zahl mit eins. Der Nutzer kann jedoch `addieren(4, incrementer = 4)` eingeben, die Zahl wird nun um vier erhöht.
+Um einer Funktion eine andere Funktion zu übergeben wird diese in den Argumenten mit `func` vermerkt.
+```
+funktionsfunktion() <- function(func, input) {
+  func(input)
+}
+```
+Diese Funktion ist recht langweilig und unsinnig, denn alles was sie macht ist eine Funktion als Argument zu nehmen und den zweiten Input in die Funktion einzusetzen.
 
+###Binäroperatoren definieren
+Neben den bekannten Binäroperatoren (`+`, `-`, `/` und `*`) können in R auch eigene Binäroperatoren definiert werden. Macht aber nur Sinn, wenn diese auch sehr oft verwendet werden, sonst schränken sie die Lesbarkeit des Programms ein. Sie werden ähnlich wie Funktionen definiert:
 
-##Execute basic arithmetic operations
+```
+"%Name%" <- function{arg1, arg2} {
+  #Here is where the magic happens
+}
+```
+Hier ist vor allem auf die Anführungszeichen um den Operatornamen zu achten. Aufgerufen wird der Operator mittels
+```
+4 %Name% 5
+```
 
+##Ellipsen
+Bei der Definition einer Funktion kann auch eine unbestimmte Anzahl an Argumenten vorgesehen werden.
+```
+funktion <- function(argumtent1, ..., argument2=4) {
+  #Hier passiert was
+}
+```
+Dazu wird eine Ellippse `...` verwendet. Sie kann eine beliebige Zahl an Argumenten aufnehmen, um sie zu verarbeiten. Alle darauf folgenden Argumente müssen mit einem Standardwert versehen sein. Wenn dieser geändert werden soll, muss der Argumentname mit angegeben werden.
+Die Ellipse wird in der Funktion in eine Liste übergeben und von dort aus einzelnen Argumenten zugewiesen.
+```
+funktion <- function(argument1, ..., argument2=4) {
+  args <- list(...)
+  arg1 <- args[1]
+  etc. pp.
+  später sinnvollerweise mit loop.
+}
+```
+#Kontrollstrukturen
 
-##Subset R objects using the "[", "[[", and "$" operators and logical vectors
++ **`if/else`**
++ **`for`**
++ **`while`**
++ **`repeat`** wiederholt einen unendlichen Loop
++ **`break`** beendet die Wiederholung
++ **`next`** überspringt eine Wiederholung
++ **`return`** beendet die Funktion und gibt einen Wert aus (oder auch nicht)
 
+##if/else
+```
+if(condition1) {
+  #Code der ausgeführt wird, wenn condition1 == TRUE
+}
+elseif(condition2) {
+  #Code der ausgeführt wird, wenn condition2 == TRUE
+}
+else {
+  #Code der ausgeführt wird, wenn condition1 == FALSE && condition2 == FALSE
+}
+```
+if kann auch für sich alleine stehen. Else ist nicht nötig. Die if-Funktion kann direkt einer Variable zugewiesen werden:
+```
+if(x<4) {
+  y <- 5
+}
+else {
+  y <- 10
+}
+```
+ist das selbe wie
+```
+y <- if(x<4) {
+  5
+}
+else {
+  10
+}
+```
+##for-Schleife
+```
+for(i in 1:10) {
+  print i
+}
+```
+Einfacher, und ohne `length(x)` gehts mit:
+```
+x <- c("a", "b", "c")
 
-##Describe the explicit coercion feature of R
+for(letter in x) {
+  print(letter)
+}
+```
+For-Schleifen sind auch in einer einzigen Zeile ohne geschweifte Klammern möglich, wenn er nur eine Zeile hat.
+##while-Schleife
+```
+count <- 0
+while(count < 10) {
+  print(count)
+  count <- count + 1
+}
+```
+#Zeit und Datum
 
+Zeit und Datum lassen sich mit Rechenoperatoren `+`, `-`, `*` und `/` verarbeiten. Format stimmt dann sogar noch.
 
-##Remove missing (NA) values from a vector
++ **`Sys.date()`** gibt das aktuelle Datum aus
++ **`Sys.time()`** gibt die aktuelle Zeit aus
++ **`unclass()`** legt frei was behind the scenes passiert. `unclass(Sys.time)` gibt die Sekunden seit dem 1. Januar 1970 aus.
++ **`as.Date(YYYY-MM-DD)`** formatiert als Datum
++ **`strptime("October 17, 1986 08:24", , "%B %d, %Y %H:%M")`** nimmt einen String auf, der ein Datum enthält und formatiert es als Datumsformat. Input egal, weiter Flags siehe man-page.
++ **`weekdays(Sys.date())`** gibt den Wochentag aus, solange der input ein beliebiges Datumsformat ist.
++ **`months(Sys.time)`** gibt den Monat aus, solange der input ein beliebiges Datumsformat ist.
++ **`quarters(x)`** gibt das Quartal aus, solange der input ein beliebiges Datumsformat ist.
++ **`difftime(Sys.date, zeitVariable, units="days")`** gibt die Zeitdifferenz aus.
+
+Das [lubridate-Paket](https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html) von Hadley Wickham fügt mehr Funktionen für die Zeitverarbeitung hinzu. `base` hat aber auch schon einiges.
