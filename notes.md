@@ -65,6 +65,8 @@ Der R-Core besteht aus den R-base und R-recommended Paketen. Diese werden von de
 + **`sample(n)`** gibt 1 bis n in zufälliger Reihenfolge aus.
 + **`Sys.Date()`** gibt die Systemzeit aus.
 + **`paste()`** nimmt eine beliebige Anzahl an Strings aus und verbindet sie zu einem. Standardtrenner ist das Leerzeichen.
++ **`na.rm(x)`** entfernt alle `NA`s aus `x`
++ **`invisible()`** verhindert dass das zurückgegebene Objekt auf dem Bildschirm ausgegeben wird.
 
 
 ## Subsetting vectors
@@ -221,6 +223,7 @@ Manipuliere die Argumente
 Gib einen Wert aus
 }
 ```
+Die Ausgabe der Funktion ist immer der Wert, der in der letzten Zeile berechnet wird.
 Als Beispiel die my_mean-Funktion aus dem swirl-Kurs:
 ```
 my_mean <- function(my_vector) {
@@ -242,6 +245,13 @@ funktionsfunktion() <- function(func, input) {
 }
 ```
 Diese Funktion ist recht langweilig und unsinnig, denn alles was sie macht ist eine Funktion als Argument zu nehmen und den zweiten Input in die Funktion einzusetzen.
+
+Um einem Programm eine On/Off-Funktion hinzuzufügen wird diese mit TRUE/FALSE in den Argumenten vermerkt. Um bspw. NAs aus dem verarbeiteten Datensatz zu entfernen schreibt man
+```
+mean <- function(x, removeNA=TRUE) {
+  mean(x, na.rm = removeNA)
+}
+```
 
 ###Binäroperatoren definieren
 Neben den bekannten Binäroperatoren (`+`, `-`, `/` und `*`) können in R auch eigene Binäroperatoren definiert werden. Macht aber nur Sinn, wenn diese auch sehr oft verwendet werden, sonst schränken sie die Lesbarkeit des Programms ein. Sie werden ähnlich wie Funktionen definiert:
@@ -336,6 +346,29 @@ while(count < 10) {
   count <- count + 1
 }
 ```
+##repeat
+```
+repeat {
+  #Was hier steht wird für immer wiederholt
+  if(condition1) {
+    #Außer man breakt.
+    break
+  }
+}
+```
+repeat-Loops können prinzipiell für immer laufen und damit das Programm hängen lassen. Use with care.
+
+##next & return
+```
+for (i in 1:100) {
+  if (i<20) {
+    #überspringt die ersten 19 Wiederholungen
+    next
+  }
+
+}
+```
+return hat die prinzipiell gleiche Funktionalität, wird nur meist für Funktionen verwendet und kann einen Wert zurückgeben.
 #Zeit und Datum
 
 Zeit und Datum lassen sich mit Rechenoperatoren `+`, `-`, `*` und `/` verarbeiten. Format stimmt dann sogar noch.
@@ -351,3 +384,108 @@ Zeit und Datum lassen sich mit Rechenoperatoren `+`, `-`, `*` und `/` verarbeite
 + **`difftime(Sys.date, zeitVariable, units="days")`** gibt die Zeitdifferenz aus.
 
 Das [lubridate-Paket](https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html) von Hadley Wickham fügt mehr Funktionen für die Zeitverarbeitung hinzu. `base` hat aber auch schon einiges.
+
+#Bereiche
+
++ **`environment()`** gibt den Arbeitsbereich aus, in dem die Variable definiert ist.
++ **``**
+
+Wenn eine Befehl aufgerufen wird, sucht R in verschiedenen Bereichen nach dem Begriff:
+```
+[1] ".GlobalEnv"        "tools:rstudio"     "package:stats"     "package:graphics"
+[5] "package:grDevices" "package:utils"     "package:datasets"  "package:methods"  
+[9] "Autoloads"         "package:base"
+```
+Die obige Liste kann mit `search()` aufgerufen werden. Zuerst durchsucht R die globale Umgebung, also ob das Paket bereits definiert ist. Wenn nicht in absteigender Reihenfolge durch die jeweiligen Tools und Pakete. Wenn neue Pakete geladen werden, werden diese stets an die zweite Stelle gestellt. Man spricht hier vom **dynamischen Scoping**.
+Dies kann sich zunutze gemacht werden, um Variablen Funktionseigenschaften zuzuweisen. Dazu wird eine Funktion definiert, die eine Funktion zurückgibt:
+```
+make.power <- function(n) {
+  pow <- function(x) {
+    x^n
+  }
+    pow
+}
+```
+Wenn diese Funktion nun einer Variablen zugewiesen wird, wird der übergebene Wert `n` direkt an die Subfunktion weitergegeben, das `x` steht noch weiter zur Definition.
+```
+>cube <- make.power(3)
+>square <- make.power(2)
+>
+>cube(3)
++[1] 27
+>square(3)
++[1] 9
+```
+Die Funktion `make.power` versieht also die Variable mit der von ihr definierten Funktion.
+
+#Loopfunktionen
+
+Loopfunktionen werden vor allem in interaktiven Umgebungen benutzt, wenn es ungünstig ist einen Loop selbst zu schreiben.
+
++ **`lapply()`** loopt durch eine Liste und wendet eine Funktion auf jedes Element an.
++ **`sapply()`** loopt durch eine Liste und wendet eine Funktion auf jedes Element an. Vereinfacht das Ergebnis.
++ **`aplly(x, m, func)`** loopt durch ein mehrdimensionales Objekt `x` in Dimension `m` und führt dabei `func` aus.
++ **`tapply()`** loopt durch eine
++ **`mapply()`** loopt durch mehrere Listen und wendet eine Funktion auf jedes Element an.
++ **`split(x, x$Variablenname)`** teilt ein Objekt in Teilobjekte.
+
+Loopfunktionen arbeiten häufig mit anonymen Funktionen, also Funktionen die keinen Namen haben. Sie werden direkt im Funktionsaufruf der `xapply()`-Funktion definiert.
+```
+>lapply(x, function(elt) elt[ ,1]) #extrahiert die erste Zeile eines Vektors
++$a
++[1] 1 3
++[1] 2 4 6
+```
+
+##apply()
+Das Argument, das die Dimension beschreibt ist quasi als Auswahl zwischen Reihen und Spalten zu verstehen. `1` geht die einzelnen Reihen durch; `2` die einzelnen Spalten. Die Dimensionen trifft man auch in der Auswahl eines Elements aus einer Matrix matrix[1, 2] wieder.
+Um die Summe oder den Mittelwert einer Reihe/Spalte zu berechnen gibt es eigene, optimierte Funktionen.
+
+#Explorative Analyse eines Datensatzes
+
++ **`table(varname$colname)`** gibt die Anzahl verschiedener Objekte in einer Spalte aus.
++ **`str()`** gibt die Struktur eines Datensatzes zurück.
++ **`summary()`** gibt eine Zusammenfassung eines Datensatzes zurück.
+
+#Simulation
+
+Simulationen arbeiten sehr viel mit Zufallszahlen. Diese Zahlen sind aber nicht wirklich zufällig. Um den selben Satz an Zufallszahlen zu generieren muss mit der Funktion `set.seed(n)` der Seed auf die gleiche Zahl gesetzt werden.
+
++ **`sample(n:m, x)`** gibt x Zahlen aus dem Bereich n-m aus. Beispiel: Würfel. Gibt auch Vektoren in zufälliger Reihenfolge wieder aus.
++ **`rbinom(1, size = n, prob = m)`** gibt die Anzahl der geglückten Versuche von n Gesamtversuchen aus, bei denen das Ergebnis 1 mit der Wahrscheinlichkeit m eingetreten ist.
++ **`rnorm()`** gibt die Normalverteilung aus.
++ **`hist()`** gibt das Histogramm einer Verteilung aus.
++ **``**
+
+Jede Funktion die mit der Normalverteilung zu tun hat hat 4 Geschmacksrichtungen:
+
++ **`d`** für die Dichte (density)
++ **`r`** für Zufallszahlengenerierung (random number generation)
++ **`p`** für kumulative Verteilungen (cumulative distribution)
++ **`q`** für die Quantilfunktion (quantile function)
+
+Die Funktionen sind basically:
+
++ **`norm()`** Normalverteilung
++ **`pois()`** Poissonverteilung
++ **`binom`** Binomialverteilung
++ **``** Exponentialverteilung
++ **``** Gammaverteilung
+
+
+##Linearmodelle simulieren
+```
+set.seed(1)
+x <- rnorm(100) #100 Zufallswerte
+#x <- rbinom(100, 1, 0.5) für binärwerte
+e <- rnorm(100, 0, 2) #Noise
+y <- 0.5 + 2 * x + e #Geradenfunktion
+summary(y)
+```
+
+#Profiler
+
++ **`system.time()`** misst die Zeit, die vergeht um einen Befehl auszuführen. `user time` ist dabei die Zeit, die die CPU verbraucht. `Elapsed Time`, die Zeit die der Nutzer auf eine Ausgabe wartet.
++ **`Rprof()`** ruft den Profiler auf.
++ **`summaryRprof()`** gibt eine Zusammenfassung der Ergebnisse des Profilers aus. Dieses Programm kann mit dem `$by.total` und dem `$by.self` Argument ausgegeben werden. `by.total` zeigt absteigend an, wie viel Zeit in jeder Funktion verbraucht wurde, die aufgerufen wurde. Die ursprünglich aufgerufene Top-Level-Funktion hat dabei immer 100% und Rechenzeit die in Funktionen verbraucht wurde, die von einer Funktion in einer Funktion aufgerufen wurden, wird der übergeordneten Funktion zugerechnet. `by.self` führt dahingegen nur die Zeit auf, die eine Funktion tatsächlich verbraucht hat.
++ **``**
