@@ -259,5 +259,69 @@ Das `httr`-Paket erlaubt
 + **`PUT`** updatet bereits bestehende Inhalte.
 + **`DELETE`** löscht Inhalte.
 
-##Others
-Es gibt für fast alle Arten von Daten ein eigenes R-Paket. Am einfachsten googlen. Auch für Bilddateien, andere Programmiersprachen, Ortsdaten, Musik, 
+###Others
+Es gibt für fast alle Arten von Daten ein eigenes R-Paket. Am einfachsten googlen. Auch für Bilddateien, andere Programmiersprachen, Ortsdaten, Musik,
+
+
+##Subsetting
+
+Mit den bekannten Operatoren `$`, `[]`, `[[]]` können Subsets gebildet werden. In diesen können auch logische Operatoren verwendet werden. `X[(X$var1 > 1 & X$var3 < 5), ]` gibt alle Zeilen von `X` aus in welchen `var1` größer als 1 und `var3` kleiner als 5 ist. Die logischen Operatoren sind `&` und `|` oder die selbstdefinierten `%name%`.
+
+Durch die Verwendung des `which()`-Kommandos können `NA`s ausgeschlossen werden.
+
++ **`sort(X)`** gibt X in aufsteigender Reihenfolge aus.
++ **`X[order(X$var1, X$var2)]`** sortiert den `data.frame` in aufsteigender Reihenfolge von `var1`. Wenn mehr als ein Argument übergeben wird, so wird primär nach dem ersten Argument sortiert. Wenn zwei Variablen den selben Wert haben, so werden diese in aufsteigender Reihenfolge des zweiten Arguments sortiert.
+
+Um einem Datensatz neue Spalten hinzuzufügen wird diese direkt bei der Zuweisung definiert:
+```
+> X <- data.frame(var1=c(1, 3, 4), var2=c(2, 4, 5))
+> X
+  var1 var2
+1    1    2
+2    3    4
+3    4    5
+> X$var3 <- c(6, 3, 5)
+> X
+  var1 var2 var3
+1    1    2    6
+2    3    4    3
+3    4    5    5
+```
+Mit dem Befehl `cbind()` kann das gleiche Ergebnis erzielt werden. Weiter Infos gibt es im [LectureScript](http://biostat.jhsph.edu/~ajaffe/lec_winterR/Lecture%202.pdf).
+
+
+###plyr-Paket
+Das `plyr`-Paket macht das Sortieren etwas leichter:
+
++ **`arrange(X, var1)`** sortiert `X` in Reihenfolge von `var1`.
+
+###dplyr-Paket
+Die fünf Hauptverben des dplyr-Pakets sind `select`, `filter`, `arrange`, `mutate` und `summarize:`
+
++ **`select(dataset, var1, var2)`** gibt nur `var1` und `var2` aus dem Datensatz aus.
++ **`filter(dataset, var1 == "bla", var2 <= 3.4)`** gibt die Zeilen aus, in denen alle Bedingungen zutreffen. Geht auch mit `|`-Operator.
++ **`arrange(X, var1)`** sortiert `X` in Reihenfolge von `var1`.
++ **`arrange(X, desc(var1))`** sortiert `X` in absteigender Reihenfolge von `var1`.
++ **`mutate(df, x = y*2)`** fügt `df` eine neue Spalte `x` hinzu. Diese hat den doppelten Wert von `y`.
++ **`summarize(dataset, name = var1*2)`** stellt eine Zusammenfassung des Datensatzes anhand einer Zeile dar.
+
+Neben den fünf Hauptfunktionen gibt es noch weitere Funktionen in `dplyr`:
++ **`group_by(database, var1)`** gruppiert den frame nach `var1`. Alle Aktionen werden jetzt auf Basis der Gruppierten Spalte gemacht.
++ **`n()`** ist eine komische Funktion. Sie kann nur innerhalb der `summarize()`-Funktion aufgerufen werden und zählt, wie oft ein Element pro Gruppe vorkommt.
++ **`n_distinct(var)`** zählt wie viele verschiedene Einträge es in `var` gibt.   
++ **`%>%`** wird als "then" ausgesprochen. Wird benutzt um in einem Skript verschiedene Programmaufrufe hintereinander zu stellen ohne das Programm schwer lesbar Verschachteln zu müssen.
+
+##Summarizing Data
++ **`head()`**
++ **`tail()`**
++ **`summary()`**
++ **`str()`**
++ **`quantile()`** Errechnet das [Quanitl](https://de.wikipedia.org/wiki/Quantil_(Wahrscheinlichkeitstheorie)) einer Funktion.
++ **`table()`** gibt einzelne Spalten als Tabelle aus. Um die `NA`s miteinzubeziehen, das Argument `useNA="ifany"` übergeben. Mit zwei übergebenen Spalten gibt `table()` eine Kreuztabelle aus.
++ **`any(logischesArgument)`** gibt `TRUE` zurück, wenn ein beliebiges der übergebenen Argumente `TRUE` ist.
++ **`all(logischesArgument)`** gibt `TRUE` zurück, wenn alle der übergebenen Argumente `TRUE` sind.
++ **`colSums()`** gibt die Summe einer Spalte zurück. Besonders hilfreich in Verbindung mit `is.na()`.
++ **`rowSums()`** gibt die Summe einer Zeile zurück. Besonders hilfreich in Verbindung mit `is.na()`.
++ **`X[X$var1 %in% c(1, 2, 3)]`** gibt die Reihen zurück in denen `var1` eine Teilmenge von c ist.
++ **`xtabs(var1 ~ var2 + var3, data=dataframe)`** erstellt eine Kreuztabelle aus den beiden Variablen.
++ **`ftable(xtabs())`** vereinfacht den Output von `xtabs()`.
