@@ -271,6 +271,8 @@ Durch die Verwendung des `which()`-Kommandos können `NA`s ausgeschlossen werden
 
 + **`sort(X)`** gibt X in aufsteigender Reihenfolge aus.
 + **`X[order(X$var1, X$var2)]`** sortiert den `data.frame` in aufsteigender Reihenfolge von `var1`. Wenn mehr als ein Argument übergeben wird, so wird primär nach dem ersten Argument sortiert. Wenn zwei Variablen den selben Wert haben, so werden diese in aufsteigender Reihenfolge des zweiten Arguments sortiert.
++ **`subset(df, var1 == "expression")`** erstellt ein Subset aus `df`, in dem alle Zeilen enthalten sind in welchen `var1` `expression` lautet.
++ **`with(df, function(var1, var2))`** erspart Tipperei indem es `var1` und `var2` als Variablen von `df` ansieht.
 
 Um einem Datensatz neue Spalten hinzuzufügen wird diese direkt bei der Zuweisung definiert:
 ```
@@ -295,6 +297,8 @@ Das `plyr`-Paket macht das Sortieren etwas leichter:
 
 + **`arrange(X, var1)`** sortiert `X` in Reihenfolge von `var1`.
 
+Es gibt noch viele weitere Funktionen, nachzulesen im [Tutorial](http://plyr.had.co.nz/09/user)
+
 ###dplyr-Paket
 Die fünf Hauptverben des dplyr-Pakets sind `select`, `filter`, `arrange`, `mutate` und `summarize:`
 
@@ -306,10 +310,18 @@ Die fünf Hauptverben des dplyr-Pakets sind `select`, `filter`, `arrange`, `muta
 + **`summarize(dataset, name = var1*2)`** stellt eine Zusammenfassung des Datensatzes anhand einer Zeile dar.
 
 Neben den fünf Hauptfunktionen gibt es noch weitere Funktionen in `dplyr`:
++ **`names(df)`** gibt die Spaltennamen von `df` aus.
 + **`group_by(database, var1)`** gruppiert den frame nach `var1`. Alle Aktionen werden jetzt auf Basis der Gruppierten Spalte gemacht.
 + **`n()`** ist eine komische Funktion. Sie kann nur innerhalb der `summarize()`-Funktion aufgerufen werden und zählt, wie oft ein Element pro Gruppe vorkommt.
 + **`n_distinct(var)`** zählt wie viele verschiedene Einträge es in `var` gibt.   
-+ **`%>%`** wird als "then" ausgesprochen. Wird benutzt um in einem Skript verschiedene Programmaufrufe hintereinander zu stellen ohne das Programm schwer lesbar Verschachteln zu müssen.
++ **`desc()`** wird nur innerhalb von `arrange()` angewandt und kehrt die Reihenfolge um.
++ **`%>%`** wird als "then" ausgesprochen. Wird benutzt um in einem Skript verschiedene Programmaufrufe hintereinander zu stellen ohne das Programm schwer lesbar Verschachteln zu müssen. Das Ergebnis der vorhergegangenen Funktion ist das erste Argument der folgenden Funktion. Das erste Argument fällt somit weg. Helpfile mit ?chain.
++ **`ddply(df, .(var1), summarize, func)`** nimmt `var1` aus `df` und summiert auf. Mit func kann eine weiter Funktion übergeben werden, die auch mit `col1 = func` in eine eigene Spalte übertragen werden kann.
++ **`rename(df, col1 = oldname1, col2 = oldname2)`** benennt Spalten um.
+
+###Syntax
++ Um eine Sequenz von Spalten auszuwählen kann diese einfach mit `:` beschrieben werden: `select(df, var1:var5)`
++ Um einzelne Werte aus einer Auswahl auszuschließen wird das `-` verwendet, nicht das `!`.
 
 ##Summarizing Data
 + **`head()`**
@@ -325,3 +337,180 @@ Neben den fünf Hauptfunktionen gibt es noch weitere Funktionen in `dplyr`:
 + **`X[X$var1 %in% c(1, 2, 3)]`** gibt die Reihen zurück in denen `var1` eine Teilmenge von c ist.
 + **`xtabs(var1 ~ var2 + var3, data=dataframe)`** erstellt eine Kreuztabelle aus den beiden Variablen.
 + **`ftable(xtabs())`** vereinfacht den Output von `xtabs()`.
+
+##Daten aufräumen mit `tidyr`
+Datensätze sollten immer gewissen Prinzipien folgen: Eine Variable pro Spalte, eine Messung pro Zeile. Dies wird nicht immer eingehalten, doch das `tidyr`-Paket hilft dabei. In Hadley Wickhams ["Tidy Data"-Paper](http://vita.had.co.nz/papers/tidy-data.pdf) sind weitere Verwendungen des Pakets und Prinzipien sauberer Datensätze aufgeführt. *Hier später Zusammenfassung einfügen.*
+
++ **`gather(df, col1, col2, -col3)`** nimmt df als Input und bildet aus allen Spalten neue Paare, außer `col3`. Die neuen Spalten werden `col1` und `col2` genannt.
++ **`separate(df, col1, c("col2", "col3"))`** spaltet die Werte in `col1` auf und fügt sie in die neuen Spalten `col2` und `col3` ein. Als Trenner wird von Haus aus immer ein nicht alphanumerischer Wert angenommen. Die alte Spalte `col1` wird gelöscht.
++ **`spread(df, key, value)`** nimmt die Werte aus `key` und generiert daraus Spalten, die mit den Werten aus `value` gefüllt werden.
+
+##Daten aufräumen mit `reshape2`
+
+Mit melt können Variablen, die fälschlicherweise als Spaltennamen eingetragen wurden korrigiert werden:
+```
+> head(mtcars)
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+> mtcars$carname <- rownames(mtcars)
+> carMelt <- melt(mtcars, id=c("carname", "gear", "cyl"), measure.vars = c("mpg", "hp"))
+> head(carMelt)
+            carname gear cyl variable value
+1         Mazda RX4    4   6      mpg  21.0
+2     Mazda RX4 Wag    4   6      mpg  21.0
+3        Datsun 710    4   4      mpg  22.8
+4    Hornet 4 Drive    3   6      mpg  21.4
+```
+
+Das Kommando `dcast` stellt Variablen untereinander ins Verhältnis und gibt eine Tabelle zurück.
+```
+> cylData <- dcast(carMelt, cyl ~ variable)
+> head(cylData)
+  cyl mpg hp
+1   4  11 11
+2   6   7  7
+3   8  14 14
+> cylData <- dcast(carMelt, cyl ~ variable, mean)
+> head(cylData)
+  cyl      mpg        hp
+1   4 26.66364  82.63636
+2   6 19.74286 122.28571
+3   8 15.10000 209.21429
+```
+
+Ein ausführliches [Tutorial](http://www.slideshare.net/jeffreybreen/reshaping-data-in-r)
+
+##Neue Variablen
+Neue Variablen werden vor allem für Vorhersagen gebraucht, aber auch um Verhältnisse innerhalb eines Datensatzes auszudrücken.
+
+Mit dem bereits in notes.md beschriebenen `seq()`-Kommando lassen sich einzelne Sequenzen aus dem Datensatz entnehmen.
+Das Paket `Hmisc` bringt weitere Funktionen mit sich:
+
++ **`cut2(df, g=4)`** zerlegt den Datensatz in vier Quantilen von `df`.
++ **`factor(df)`** gibt `df` als [Faktor](https://stat.ethz.ch/R-manual/R-devel/library/base/html/factor.html) zurück.
++ **`abs(x)`** gibt den Betrag zurück.
++ **`sqrt(x)`** gibt die Wurzel zurück.
++ **`ceiling(x)`** rundet `x` auf die nächste ganze Zahl auf.
++ **`floor(x)`** rundet `x` auf die nächste ganze Zahl ab.
++ **`round(x, digits=n)`** rundet `x` auf `n` Nachkommastellen.
++ **`signif(x, digits=n)`** rundet `x` auf `n` Stellen.
++ **`cos(x)`** gibt den Kosinus aus.
++ **`sin(x)`** gibt den Sinus aus.
++ **`log(x)`** gibt den logarithmus Naturalis aus.
++ **`log2(x), log10(x)`**
++ **`exp(x)`** e^x
+
+##Daten zusammenfügen
+
+Mit dem `merge(df1, df2, by.x="colname1", by.y="colname2")`-Befehl werden zwei Datensätze zusammengefügt. `merge()` wird versuchen die Spalten mit den gleichen Namen passend zusammenzufügen. Wenn die Spalten unterschiedlich benannt sind, kann dies mit dem `by`-Parameter angegeben werden.  
+
+Das `plyr`-Paket stellt die ähnliche Funktion `join()` zur Verfügung. Es ist schneller als die Funktion aus dem base-Paket matcht aber nur Spalten mit gleichem Namen. Ein großer Vorteil ist, dass `join()` auch mehr als zwei Datensätze zusemamenführt, solang der Spaltenname der gleiche ist.
+
+##Textvariablen bearbeiten
+
++ **`tolower()`** setzt alles in Kleinbuchstaben.
++ **`toupper()`** setzt alles in Großsbuchstaben.
++ **`strsplit(strinlist, "\\.")`** zerlegt einen String an jedem Punkt. Gibt eine Liste zurück.
++ **`sub("x", " ", list)`** ersetzt das Erste `x` in `list` durch ein Leerzeichen.
++ **`gsub("x", " ", list)`** ersetzt alle `x` in `list` durch ein Leerzeichen.
++ **`grep("Suchbegriff", varname)`** sucht in `varname` nach `Suchbegriff`. Gibt die Indizes der Treffer als Liste zurück.
++ **`grepl("Suchbegriff", varname)`** sucht in `varname` nach `Suchbegriff`. Gibt eine Liste mit `TRUE`/`FALSE`-Werten zurück.
+
+Die folgenden Funktionen sind im `stringr`-Paket untergebracht:
++ **`nchar(x)`** gibt die Anzahl an Buchstaben zurück.
++ **`substr("string", 1, 4)`** nimmt den ersten bis 4 Buchstaben aus `string`.
++ **`paste("string", "string2")`** verbindet die beiden Strings.
++ **`str_trim("asddf    ")`** entfernt alle Leerzeichen am Ende des Strings.
+
+##RegEx
+
++ **`^`** Zeilenbeginn
++ **`$`** Zeilenende
++ **`[Bb]`** matcht B und b.
++ **`[a-z]`** matcht alle Kleinbuchstaben ohne Umlaute.
++ **`[^x]`** matcht alles außer `x`. Das `^` ist quasi das `!` der RegEx.
++ **`.`** matcht genau ein Zeichen.
++ **`|`** oder.
++ **`()`** nimmt Argumente zusammen. Ähnliche Funktion wie bei mathematischen Formeln.
++ **`*`** kann so oft vorkommen wie er will. Auch gar nicht.  
++ **`+`** muss mindestens einmal vorkommen
++ **`[Bb]{1,4}`** B oder b muss mindestens einmal, höchstens viermal vorkommen. Wenn vor oder nach dem Komma keine Zahl kommt, wird dies als mindestens bzw. höchstens aufgefasst.
++ **`+\1`** der letzte Treffer muss wieder zutreffen.
++ **`*?`** ist nicht greedy. Macht das `?`.
+
+#Zeit und Datum
+
+Zeit und Datum lassen sich mit Rechenoperatoren `+`, `-`, `*` und `/` verarbeiten. Format stimmt dann sogar noch.
+
++ **`Sys.date()`** gibt das aktuelle Datum aus
++ **`Sys.time()`** gibt die aktuelle Zeit aus
++ **`unclass()`** legt frei was behind the scenes passiert. `unclass(Sys.time)` gibt die Sekunden seit dem 1. Januar 1970 aus.
++ **`as.Date(YYYY-MM-DD)`** formatiert als Datum
++ **`strptime("October 17, 1986 08:24", , "%B %d, %Y %H:%M")`** nimmt einen String auf, der ein Datum enthält und formatiert es als Datumsformat. Input egal, weiter Flags siehe man-page.
++ **`weekdays(Sys.date())`** gibt den Wochentag aus, solange der input ein beliebiges Datumsformat ist.
++ **`months(Sys.time)`** gibt den Monat aus, solange der input ein beliebiges Datumsformat ist.
++ **`quarters(x)`** gibt das Quartal aus, solange der input ein beliebiges Datumsformat ist.
++ **`difftime(Sys.date, zeitVariable, units="days")`** gibt die Zeitdifferenz aus.
++ **`format(date, "%a %b %d")`** formatiert das Datum um.
+
+Um die verschiedenen Teile des Datums darzustellen werden folgende Flags verwendet:
++ **`%d`** Tag als Integer (1-31)
++ **`%a`** abgekürzter Wochentag
++ **`%A`** ausgeschriebener Wochentag
++ **`%m`** Monat als Integer
++ **`%b`** abgekürzter Monat
++ **`%B`** ausgeschriebener Monat
++ **`%y`** Jahreszahl zweistellig
++ **`%Y`** Jahreszahl vierstellig
+
+Das [lubridate-Paket](https://cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html) von Hadley Wickham fügt mehr Funktionen für die Zeitverarbeitung hinzu. `base` hat aber auch schon einiges.
+
++ **`mdy(12122008)`** wandelt die Zahl in ein Datum um. Funktioniert ohne Flags, nur mit dem Funktionsaufruf selbst.
++ **`mdy_hms(12122008 10:15:03)`** wandelt die Zahl in ein Datum um.
++ **`mdy_hms(12122008 10:15:03, tz = "Europe/Berlin")`** wandelt die Zahl in ein Datum um, mit Angabe der Zeitzone. Hilfe zu den Zeitzonen unter `?timezones`.
+
+##Datenquellen
+
+###OpenGov-Seiten
+Eine vollständige Liste ist auf der OpenData Seite der USA zu finden: [https://www.data.gov/open-gov/](https://www.data.gov/open-gov/)
+
+Unter anderem:
++ [data.un.org](http://data.un.org) (UN)
++ [govdata.de](www.govadata.de) (Deutschland)
++ [Gapminder](http://www.gapminder.org) ca. 5000 Datensätze vor allem aus dem NGO-Bereich.
++ [asdfree](www.asdfree.com) Umfrageergebnisse aus den USA.
++ [Infochimps](www.infochimps.com/marketplace) kostenlose und kostenpflichtige Datensätze.
++ [Kaggle](www.kaggle.com) bietet vor allem DataScience-Competitions an. Gibt aber auch die Datensätze für lau dazu. Prima um zu üben und zu lernen.
+
+
+###Datascientists
+Verschiedene Datascientists haben ihre eigenen Sammlungen:
+
++ [Hilary Mason](https://bitly.com/bundles/hmason/1)
++ [Peter Skomoroch](https://delicious.com/pskomoroch/dataset)
++ [Jeff Hammerbacher](https://www.quora.com/Jeff-Hammerbacher/Introduction-to-Data-Science-Data-Sets)
++ [Gregory Piatesky-Shapiro](https://www.kdnuggets.com/gps.html)
+
+Diese stammen von diesem [Blogpost](https://blog.mortardata.com/post/67652898761/6-dataset-lists-curated-by-data-scientists)
+
+###Spezielleres
+
+* [Stanford Large Network Data](http://snap.stanford.edu/data/)
+* [UCI Machine Learning](http://archive.ics.uci.edu/ml/)
+* [KDD Nugets Datasets](http://www.kdnuggets.com/datasets/index.html)
+* [CMU Statlib](http://lib.stat.cmu.edu/datasets/)
+* [Gene expression omnibus](http://www.ncbi.nlm.nih.gov/geo/)
+* [ArXiv Data](http://arxiv.org/help/bulk_data)
+* [Public Data Sets on Amazon Web Services](http://aws.amazon.com/publicdatasets/)
+
+###APIs mit R-Schnittstelle
+
+* [twitter](https://dev.twitter.com/) and [twitteR](http://cran.r-project.org/web/packages/twitteR/index.html) package
+* [figshare](http://api.figshare.com/docs/intro.html) and [rfigshare](http://cran.r-project.org/web/packages/rfigshare/index.html)
+* [PLoS](http://api.plos.org/) and [rplos](http://cran.r-project.org/web/packages/rplos/rplos.pdf)
+* [rOpenSci](http://ropensci.org/packages/index.html)
+* [Facebook](https://developers.facebook.com/) and [RFacebook](http://cran.r-project.org/web/packages/Rfacebook/)
+* [Google maps](https://developers.google.com/maps/) and [RGoogleMaps](http://cran.r-project.org/web/packages/RgoogleMaps/index.html)

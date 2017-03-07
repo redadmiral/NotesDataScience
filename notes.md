@@ -54,7 +54,7 @@ Der R-Core besteht aus den R-base und R-recommended Paketen. Diese werden von de
 
 ## Erste Swirl-Übungen
 
-+ **`seq(m, n, by)`** erstellt eine Zahlenreihe von `m` nach `n` mit Iterationsweite by
++ **`seq(m, n, by)`** erstellt eine Zahlenreihe von `m` nach `n` mit Iterationsweite `by`
 + **`m:n`** erstellt eine Zahlenreihe von `m` nach n.
 + **`length()`** gibt die Länge eines Vektors aus.
 + **`class(x)`** gibt die Klasse von`x`aus.
@@ -105,7 +105,7 @@ Matrizen können nur einen spezifischen Datentyp beinhalten. Data Frames dahinge
 Auch Listen können verschiedene Dateitypen beinhalten. Ihre einzelnen Bestandteiler werden durch eckige Doppelklammern `list[[n]]` aufgerufen.
 
 + **`list <- list(a=1, b=2, c=3)`** erstellt eine benannte Liste.
-
++ **`unlist(list)`** erstellt aus einer Liste einen Vektor. 
 ## Faktoren
 Faktoren werden benutzt um Datenkategorien zu beschreiben. Sie nehmen verschiedene Datentypen auf, `character` macht jedoch am meisten Sinn, da sie benutzt werden um Daten zu beschreiben. Typische Werte eines Faktors sind bspw. `yes` und `no` oder `männlich` und `weiblich`. Die einzelnen Kategorien werden in einem Attribut `levels` gespeichert.
 
@@ -323,6 +323,11 @@ else {
   10
 }
 ```
+Es ist auch möglich, if und else in einem Statement zu kombinieren. Dafür wird das `ifelse`-Statement benutzt:
+```
+ifelse(x < 3, TRUE, FALSE)
+```
+Wenn x < 3 ist, gibt `ifelse` `TRUE` zurück, wenn nicht `FALSE`.
 ##for-Schleife
 ```
 for(i in 1:10) {
